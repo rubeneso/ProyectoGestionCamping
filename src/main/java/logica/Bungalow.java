@@ -1,5 +1,8 @@
 package logica;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 public class Bungalow extends Parcela{
 
     private int nHuepedes;
@@ -20,7 +23,27 @@ public class Bungalow extends Parcela{
     
     @Override
     public double checkOut() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(!this.ocupada) return -1;
+        this.ocupada = false;
+        long dias = ChronoUnit.DAYS.between(fEntrada, LocalDate.now());
+        if(dias < Param.getEstadiaMinimaBungalow()){
+            float precio = (float)dias * (Param.getPrecioAdultoDiaBungalow() * (nHuepedes - numeroMenoresEdad));
+            return precio + (precio * Param.getPorcentajeRecargoBungalow() / 100);
+        }
+        else{
+            return (float)dias * (Param.getPrecioAdultoDiaBungalow() * (nHuepedes - numeroMenoresEdad));
+        }
     }
+
+    @Override
+    public String toString() {
+        if(ocupada){
+            return "Parcela{" + "ocupada=" + ocupada + ", dniHuesped=" + dniHuesped + ", fEntrada=" + fEntrada + "nHuepedes=" + nHuepedes + ", numeroMenoresEdad=" + numeroMenoresEdad + '}';
+        }
+        else{
+            return "Parcela{" + "ocupada=" + ocupada+ '}';
+        }
+    }
+    
     
 }

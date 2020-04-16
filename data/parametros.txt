@@ -1,0 +1,11 @@
+# Fichero de configuración
+PrecioEstadiaDiaTienda=20
+PrecioElectricidadDiaTienda=1
+PrecioDiaCaravana=30
+PrecioDiaCaravanaAgosto=40
+PrecioAdultoDiaBungalow=20
+PorcentajeDescuentoTiendas=10
+EstadiaMinimaTiendaParaDescuento=7
+EstadiaMinimaCaravana=10
+EstadiaMinimaBungalow=3
+PorcentajeRecargoBungalow=20

@@ -18,10 +18,22 @@ public abstract class Parcela implements iAlquilable{
         if(this.ocupada) return false;
         dniHuesped = dni;
         fEntrada = LocalDate.now();
+        ocupada = true;
         
-        return false;
+        return true;
     }
     
     @Override
     public abstract double checkOut();
+
+    @Override
+    public String toString() {
+        if(ocupada){
+            return "Parcela{" + "ocupada=" + ocupada + ", dniHuesped=" + dniHuesped + ", fEntrada=" + fEntrada + '}';
+        }
+        else{
+            return "Parcela{" + "ocupada=" + ocupada+ '}';
+        }
+    }
+    
 }
