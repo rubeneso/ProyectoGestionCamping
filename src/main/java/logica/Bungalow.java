@@ -28,10 +28,12 @@ public class Bungalow extends Parcela{
         long dias = ChronoUnit.DAYS.between(fEntrada, LocalDate.now());
         if(dias < Param.getEstadiaMinimaBungalow()){
             float precio = (float)dias * (Param.getPrecioAdultoDiaBungalow() * (nHuepedes - numeroMenoresEdad));
-            return precio + (precio * Param.getPorcentajeRecargoBungalow() / 100);
+            float precioFinal = precio + (precio * Param.getPorcentajeRecargoBungalow() / 100);
+            return Math.round(precioFinal * 100)/100;
         }
         else{
-            return (float)dias * (Param.getPrecioAdultoDiaBungalow() * (nHuepedes - numeroMenoresEdad));
+            float precio =  (float)dias * (Param.getPrecioAdultoDiaBungalow() * (nHuepedes - numeroMenoresEdad));
+            return Math.round(precio * 100)/100;
         }
     }
 

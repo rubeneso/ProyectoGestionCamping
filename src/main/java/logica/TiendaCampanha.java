@@ -15,11 +15,13 @@ public class TiendaCampanha extends Parcela{
         this.ocupada = false;
         long dias = ChronoUnit.DAYS.between(fEntrada, LocalDate.now());
         if(dias < Param.getEstadiaMinimaTiendaParaDescuento()){
-            return (float)dias * (Param.getPrecioEstadiaDiaTienda() + Param.getPrecioElectricidadDiaTienda());
+            float precio = (float)dias * (Param.getPrecioEstadiaDiaTienda() + Param.getPrecioElectricidadDiaTienda());
+            return Math.round(precio * 100)/100;
         }
         else{
             float precio = (float)dias * (Param.getPrecioEstadiaDiaTienda() + Param.getPrecioElectricidadDiaTienda());
-            return precio - (precio * Param.getPorcentajeDescuentoTiendas() / 100);
+            float precioFinal = precio - (precio * Param.getPorcentajeDescuentoTiendas() / 100);
+            return Math.round(precioFinal * 100)/100;
         }
     }
     

@@ -1,9 +1,52 @@
 package interfaz;
 
+import java.awt.Color;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import logica.Bungalow;
+import logica.Camping;
+
 public class JFrame extends javax.swing.JFrame {
 
+        private JButton tablero[][];
+        
         public JFrame() {
         initComponents();
+        setLocationRelativeTo(null);
+        ficheros.Ficheros.cargarParametros();
+        logica.Camping.llenarArray();
+        
+        tablero = new JButton[10][8];
+        int cont = 1;
+        
+        for (int f = 0; f < 10; f++) {
+            for (int c = 0; c < 8; c++) {
+                tablero[f][c] = new JButton();
+                tablero[f][c].setFont(new java.awt.Font("Calibri", 1, 14));
+                tablero[f][c].addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        FActionPerformed(evt);
+                    }
+                });
+                tablero[f][c].setName(String.valueOf(cont));
+                tablero[f][c].setBackground(new Color(172, 213, 255));
+                tablero[f][c].setText(String.valueOf(cont));
+                tablero[f][c].setSize(160, 78);
+                if(f == 0 || (f == 1 && c <= 1)){
+                    tablero[f][c].setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/tienda.png")));
+                }
+                if(f == 2 || (f == 1 && c >= 2) || (f == 3 && c <= 5)){
+                    tablero[f][c].setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/caravana.png")));
+                }
+                if(f >= 4 || (f == 3 && c >= 6)){
+                    tablero[f][c].setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/bungalow.png")));
+                }
+                cont++;
+                jPanelCuerpo.add(tablero[f][c]);
+            }
+        }
+        
     }
 
     /**
@@ -15,18 +58,31 @@ public class JFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jPanelCuerpo = new javax.swing.JPanel();
+        jPanelBotonera = new javax.swing.JPanel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Gestión Camping");
+        setPreferredSize(new java.awt.Dimension(1288, 882));
+
+        jPanelCuerpo.setPreferredSize(new java.awt.Dimension(1288, 782));
+        jPanelCuerpo.setLayout(new java.awt.GridLayout(10, 8, 1, 1));
+        getContentPane().add(jPanelCuerpo, java.awt.BorderLayout.PAGE_START);
+
+        jPanelBotonera.setPreferredSize(new java.awt.Dimension(1288, 100));
+
+        javax.swing.GroupLayout jPanelBotoneraLayout = new javax.swing.GroupLayout(jPanelBotonera);
+        jPanelBotonera.setLayout(jPanelBotoneraLayout);
+        jPanelBotoneraLayout.setHorizontalGroup(
+            jPanelBotoneraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1288, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        jPanelBotoneraLayout.setVerticalGroup(
+            jPanelBotoneraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
+
+        getContentPane().add(jPanelBotonera, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -65,7 +121,61 @@ public class JFrame extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void FActionPerformed(java.awt.event.MouseEvent evt) {
+        int num = Integer.parseInt(((JButton) evt.getSource()).getName());
+        if(Camping.parcelas.get(num - 1).estaLibre()){
+            String dni = JOptionPane.showInputDialog("Introduce el DNI del huésped");
+            try{
+//-----------------------------------Eliminar estos comentarios una vez terminadas las pruebas---------------------------------------------
+//                if(!comprobarDni(dni)) JOptionPane.showMessageDialog(rootPane, "El DNI introducido es incorrecto");
+//                else{
+                    if(num >= 31){
+                        String nH = JOptionPane.showInputDialog("Introduce número de huéspedes");
+                        String nM = JOptionPane.showInputDialog("Introduce número de huéspedes que son menores de edad");
+                        int nHuespedes = Integer.parseInt(nH);
+                        int nMenores = Integer.parseInt(nM);
+                        if(((Bungalow) Camping.parcelas.get(num - 1)).checkIn(dni, nHuespedes, nMenores)) ((JButton) evt.getSource()).setBackground(new Color(255, 122, 123));
+                        else JOptionPane.showMessageDialog(rootPane, "No se ha podido hacer el check in");
+                    }
+                    else{
+                        if(Camping.parcelas.get(num - 1).checkIn(dni)) ((JButton) evt.getSource()).setBackground(new Color(255, 122, 123));
+                        else JOptionPane.showMessageDialog(rootPane, "No se ha podido hacer el check in");
+                    }
+//                }
+            }
+            catch(NumberFormatException ex){
+                JOptionPane.showMessageDialog(rootPane, "Error al introducir algún dato");
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(rootPane, "El importe a cobrar son "+Camping.parcelas.get(num - 1).checkOut()+"€");
+            ((JButton) evt.getSource()).setBackground(new Color(172, 213, 255));
+        }
+        
+    }
+    private boolean comprobarDni(String dni){
+        if(dni.length() != 9) return false;
+        String letrasDni="TRWAGMYFPDXBNJZSQVHLCKE";
+        int restoDni;
+        int numDni = Integer.parseInt(dni.substring(0, 8));
+        char letra;
+        char letraDni = 'a';
+        restoDni  = numDni % 23;
+        for(int i=0;i<=22;i++){
+            letra = letrasDni.charAt(i);
+            if(restoDni==i){
+                letraDni = letra;
+            }
+        }
+        char letraRecibida = Character.toUpperCase(dni.charAt(8));
+        if(letraDni == letraRecibida) return true;
+        else return false;
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanelBotonera;
+    private javax.swing.JPanel jPanelCuerpo;
     // End of variables declaration//GEN-END:variables
 }

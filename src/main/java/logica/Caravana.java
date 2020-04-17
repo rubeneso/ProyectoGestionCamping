@@ -19,7 +19,10 @@ public class Caravana extends Parcela{
         else{
             this.ocupada = false;
             if(LocalDate.now().getMonthValue() == 8) return (float)dias * Param.getPrecioDiaCaravanaAgosto();
-            else return(float)dias * Param.getPrecioDiaCaravana();
+            else {
+                float precio = (float)dias * Param.getPrecioDiaCaravana();
+                return Math.round(precio * 100)/100;
+            }
         }
     }
     

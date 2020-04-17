@@ -25,7 +25,11 @@ public abstract class Parcela implements iAlquilable{
     
     @Override
     public abstract double checkOut();
-
+    
+    public boolean estaLibre(){
+        return !ocupada;
+    }
+    
     @Override
     public String toString() {
         if(ocupada){
