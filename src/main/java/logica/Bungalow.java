@@ -13,8 +13,12 @@ public class Bungalow extends Parcela{
     }
     
     public boolean checkIn(String dni, int nH,int nME){
-        if(!super.checkIn(dni)) return false; //Se llama al metodo padre. Si no se puede hacer el checkIn devuelde falso
-        if(nME > nH) return false; //Si el numero de menores de edad es mayor que el numero de huespedes no se hace checkIn
+        if(!super.checkIn(dni)) return false;
+        //Se llama al metodo padre. Si no se puede hacer el checkIn devuelde falso
+        if(nME > nH) {
+            ocupada = false;
+            return false;
+        } //Si el numero de menores de edad es mayor que el numero de huespedes no se hace checkIn
         nHuepedes = nH;
         numeroMenoresEdad = nME;
         

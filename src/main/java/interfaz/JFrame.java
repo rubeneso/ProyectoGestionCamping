@@ -1,10 +1,15 @@
 package interfaz;
 
 import java.awt.Color;
+import java.time.LocalDate;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import logica.Bungalow;
 import logica.Camping;
+import ficheros.Ficheros;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 
 public class JFrame extends javax.swing.JFrame {
 
@@ -13,16 +18,18 @@ public class JFrame extends javax.swing.JFrame {
         public JFrame() {
         initComponents();
         setLocationRelativeTo(null);
-        ficheros.Ficheros.cargarParametros();
-        logica.Camping.llenarArray();
+        Ficheros.cargarParametros();
+        Ficheros.cargarEstado();
         
+        //-------- Crear los botones --------
         tablero = new JButton[10][8];
         int cont = 1;
         
         for (int f = 0; f < 10; f++) {
             for (int c = 0; c < 8; c++) {
                 tablero[f][c] = new JButton();
-                tablero[f][c].setFont(new java.awt.Font("Calibri", 1, 14));
+                tablero[f][c].setFont(new java.awt.Font("Calibri", 1, 16));
+                tablero[f][c].setForeground(new Color(255, 255, 255));
                 tablero[f][c].addMouseListener(new java.awt.event.MouseAdapter() {
                     @Override
                     public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -30,9 +37,10 @@ public class JFrame extends javax.swing.JFrame {
                     }
                 });
                 tablero[f][c].setName(String.valueOf(cont));
-                tablero[f][c].setBackground(new Color(172, 213, 255));
+                if(Camping.parcelas.get(cont - 1).estaLibre()) tablero[f][c].setBackground(new Color(4, 116, 214));
+                else tablero[f][c].setBackground(new Color(145, 25, 25));
                 tablero[f][c].setText(String.valueOf(cont));
-                tablero[f][c].setSize(160, 78);
+                tablero[f][c].setSize(130, 85);
                 if(f == 0 || (f == 1 && c <= 1)){
                     tablero[f][c].setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/tienda.png")));
                 }
@@ -58,34 +66,114 @@ public class JFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jPanelCuerpo = new javax.swing.JPanel();
         jPanelBotonera = new javax.swing.JPanel();
+        jButtonParam = new javax.swing.JButton();
+        jButtonAyuda = new javax.swing.JButton();
+        jButtonAbout = new javax.swing.JButton();
+        jButtonSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gestión Camping");
-        setPreferredSize(new java.awt.Dimension(1288, 882));
+        setPreferredSize(new java.awt.Dimension(1048, 980));
 
-        jPanelCuerpo.setPreferredSize(new java.awt.Dimension(1288, 782));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1048, 60));
+
+        jLabel1.setFont(new java.awt.Font("Calibri", 0, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(4, 116, 214));
+        jLabel1.setText("Camping del Sol");
+        jPanel1.add(jLabel1);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
+
+        jPanelCuerpo.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelCuerpo.setPreferredSize(new java.awt.Dimension(1048, 860));
         jPanelCuerpo.setLayout(new java.awt.GridLayout(10, 8, 1, 1));
-        getContentPane().add(jPanelCuerpo, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(jPanelCuerpo, java.awt.BorderLayout.CENTER);
 
-        jPanelBotonera.setPreferredSize(new java.awt.Dimension(1288, 100));
+        jPanelBotonera.setPreferredSize(new java.awt.Dimension(1048, 40));
 
-        javax.swing.GroupLayout jPanelBotoneraLayout = new javax.swing.GroupLayout(jPanelBotonera);
-        jPanelBotonera.setLayout(jPanelBotoneraLayout);
-        jPanelBotoneraLayout.setHorizontalGroup(
-            jPanelBotoneraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1288, Short.MAX_VALUE)
-        );
-        jPanelBotoneraLayout.setVerticalGroup(
-            jPanelBotoneraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+        jButtonParam.setText("Parametros");
+        jButtonParam.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonParam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonParamActionPerformed(evt);
+            }
+        });
+        jPanelBotonera.add(jButtonParam);
 
-        getContentPane().add(jPanelBotonera, java.awt.BorderLayout.CENTER);
+        jButtonAyuda.setText("Ayuda");
+        jButtonAyuda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonAyuda.setMaximumSize(new java.awt.Dimension(89, 23));
+        jButtonAyuda.setMinimumSize(new java.awt.Dimension(89, 23));
+        jButtonAyuda.setPreferredSize(new java.awt.Dimension(89, 23));
+        jButtonAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAyudaActionPerformed(evt);
+            }
+        });
+        jPanelBotonera.add(jButtonAyuda);
+
+        jButtonAbout.setText("About");
+        jButtonAbout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonAbout.setMaximumSize(new java.awt.Dimension(89, 23));
+        jButtonAbout.setMinimumSize(new java.awt.Dimension(89, 23));
+        jButtonAbout.setPreferredSize(new java.awt.Dimension(89, 23));
+        jButtonAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAboutActionPerformed(evt);
+            }
+        });
+        jPanelBotonera.add(jButtonAbout);
+
+        jButtonSalir.setText("Salir");
+        jButtonSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonSalir.setMaximumSize(new java.awt.Dimension(89, 23));
+        jButtonSalir.setMinimumSize(new java.awt.Dimension(89, 23));
+        jButtonSalir.setName(""); // NOI18N
+        jButtonSalir.setPreferredSize(new java.awt.Dimension(89, 23));
+        jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalirActionPerformed(evt);
+            }
+        });
+        jPanelBotonera.add(jButtonSalir);
+
+        getContentPane().add(jPanelBotonera, java.awt.BorderLayout.PAGE_END);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jButtonSalirActionPerformed
+
+    private void jButtonParamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonParamActionPerformed
+        int opc = JOptionPane.showConfirmDialog(rootPane, "Edita el archivo 'parametros.txt' que está en la carpeta 'data' de la aplicación para cambiar los parámetros.\n"
+                + "Una vez realizados los cambios en el fichero guardalo y pulsa 'Yes' para que se cargen los nuevos parámetros");
+        if(opc == 0){
+            Ficheros.cargarParametros();
+        }
+    }//GEN-LAST:event_jButtonParamActionPerformed
+
+    private void jButtonAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAyudaActionPerformed
+        if (Desktop.isDesktopSupported()) {
+            try {
+                File myFile = new File("data"+File.separator+"Manual.pdf");
+                Desktop.getDesktop().open(myFile);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(rootPane, "No se ha podido abrir el manual");
+            }
+        }
+    }//GEN-LAST:event_jButtonAyudaActionPerformed
+
+    private void jButtonAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAboutActionPerformed
+        JOptionPane.showMessageDialog(rootPane, "Autor de la aplicación: Rubén A.\nVersión: 0.4");
+        
+    }//GEN-LAST:event_jButtonAboutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,21 +213,33 @@ public class JFrame extends javax.swing.JFrame {
     private void FActionPerformed(java.awt.event.MouseEvent evt) {
         int num = Integer.parseInt(((JButton) evt.getSource()).getName());
         if(Camping.parcelas.get(num - 1).estaLibre()){
+            //-------- Check In --------
             String dni = JOptionPane.showInputDialog("Introduce el DNI del huésped");
-            try{
+            //-------- Si se cancela a la hora de introducir el DNI no se hace el Check In --------
+            if(dni != null){
+                try{
 //-----------------------------------Eliminar estos comentarios una vez terminadas las pruebas---------------------------------------------
 //                if(!comprobarDni(dni)) JOptionPane.showMessageDialog(rootPane, "El DNI introducido es incorrecto");
 //                else{
-                    if(num >= 31){
+                    if(Camping.parcelas.get(num - 1).getClass().getName().equals("logica.Bungalow")){
+                        //-------- Datos para parcela tipo Bungalow --------
                         String nH = JOptionPane.showInputDialog("Introduce número de huéspedes");
                         String nM = JOptionPane.showInputDialog("Introduce número de huéspedes que son menores de edad");
                         int nHuespedes = Integer.parseInt(nH);
                         int nMenores = Integer.parseInt(nM);
-                        if(((Bungalow) Camping.parcelas.get(num - 1)).checkIn(dni, nHuespedes, nMenores)) ((JButton) evt.getSource()).setBackground(new Color(255, 122, 123));
+                        //-------- Si el check in devuelve true marcamos como ocupada y guardamos el estado --------
+                        if(((Bungalow) Camping.parcelas.get(num - 1)).checkIn(dni, nHuespedes, nMenores)){
+                            ((JButton) evt.getSource()).setBackground(new Color(145, 25, 25));
+                            Ficheros.guardarEstado();
+                        }
                         else JOptionPane.showMessageDialog(rootPane, "No se ha podido hacer el check in");
                     }
                     else{
-                        if(Camping.parcelas.get(num - 1).checkIn(dni)) ((JButton) evt.getSource()).setBackground(new Color(255, 122, 123));
+                    //-------- Datos para tiendas de campaña y caravanas --------
+                        if(Camping.parcelas.get(num - 1).checkIn(dni)){
+                            ((JButton) evt.getSource()).setBackground(new Color(145, 25, 25));
+                            Ficheros.guardarEstado();
+                        }
                         else JOptionPane.showMessageDialog(rootPane, "No se ha podido hacer el check in");
                     }
 //                }
@@ -147,10 +247,25 @@ public class JFrame extends javax.swing.JFrame {
             catch(NumberFormatException ex){
                 JOptionPane.showMessageDialog(rootPane, "Error al introducir algún dato");
             }
+            }
         }
         else{
-            JOptionPane.showMessageDialog(rootPane, "El importe a cobrar son "+Camping.parcelas.get(num - 1).checkOut()+"€");
-            ((JButton) evt.getSource()).setBackground(new Color(172, 213, 255));
+            //-------- Check out --------
+            double coste = Camping.parcelas.get(num - 1).checkOut();
+            if(coste == -2) JOptionPane.showMessageDialog(rootPane, "No se puede hacer el check out porque no ha transcurrido el tiempo mínimo de estadía");
+            else{
+                //-------- Sacar los datos para facturar
+                String dni = Camping.parcelas.get(num - 1).getDniHuesped();
+                String fEntrada = String.valueOf(Camping.parcelas.get(num - 1).getfEntrada());
+                String tipoParcela = Camping.parcelas.get(num - 1).getClass().getName().substring(7);
+                //-------- Facturar --------
+                Ficheros.facturar(dni+";"+num+";"+tipoParcela+";"+fEntrada+";"+LocalDate.now()+";"+coste);
+                JOptionPane.showMessageDialog(rootPane, "El importe a cobrar son "+coste+"€");
+                //-------- Marcar la parcela como libre y guardar el estado --------
+                ((JButton) evt.getSource()).setBackground(new Color(4, 116, 214));
+                Ficheros.guardarEstado();
+            }
+            
         }
         
     }
@@ -175,6 +290,12 @@ public class JFrame extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAbout;
+    private javax.swing.JButton jButtonAyuda;
+    private javax.swing.JButton jButtonParam;
+    private javax.swing.JButton jButtonSalir;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelBotonera;
     private javax.swing.JPanel jPanelCuerpo;
     // End of variables declaration//GEN-END:variables

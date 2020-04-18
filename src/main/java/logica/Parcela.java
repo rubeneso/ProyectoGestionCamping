@@ -1,9 +1,10 @@
 package logica;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
-public abstract class Parcela implements iAlquilable{
+public abstract class Parcela implements iAlquilable, Serializable{
 
     protected boolean ocupada;
     protected String dniHuesped;
@@ -28,6 +29,14 @@ public abstract class Parcela implements iAlquilable{
     
     public boolean estaLibre(){
         return !ocupada;
+    }
+
+    public String getDniHuesped() {
+        return dniHuesped;
+    }
+
+    public LocalDate getfEntrada() {
+        return fEntrada;
     }
     
     @Override
