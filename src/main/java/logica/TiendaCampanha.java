@@ -3,8 +3,16 @@ package logica;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Parcela de camping de tipo tienda de campaña
+ * @author Rubén Abellón
+ * @version 1.0
+ */
 public class TiendaCampanha extends Parcela{
 
+    /**
+     * Constructor por defecto, llama al constructor padre.
+     */
     public TiendaCampanha() {
         super();
     }

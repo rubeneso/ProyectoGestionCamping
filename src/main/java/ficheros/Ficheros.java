@@ -7,8 +7,21 @@ import logica.Param;
 import logica.Parcela;
 import java.nio.file.Files;
 
+/**
+ * Clase que dispone de los métodos estáticos necesarios para la gestión de ficheros
+ * @author Rubén Abellón
+ * @version 1.0
+ */
 public class Ficheros {
     
+    /**
+     * Carga en la clase Parametros los valores almacenados en el archivo "data/parametros.txt"
+     * @see logica.Param
+     * @return <ul>
+     * <li>true: Los parámetros se cargaron correctamente</li>
+     * <li>false: Los parámetros no se han podido cargar</li>
+     * </ul>
+     */
     public static boolean cargarParametros(){
         File f = new File("data"+File.separator+"parametros.txt");
         if(!f.exists()) return false;
@@ -30,11 +43,16 @@ public class Ficheros {
         }
         catch(IOException ex){
             System.err.println("Error: "+ex.getMessage());
+            return false;
         }
         
         return true;
     }
     
+    /**
+     * Guarda el ArrayList "parcelas" de la clase Camping en el fichero "data/parcelas.dat"
+     * @see logica.Camping
+     */
     public static void guardarEstado() {
         try (FileOutputStream fos = new FileOutputStream("data"+File.separator+"parcelas.dat", false);
                 BufferedOutputStream bos = new BufferedOutputStream(fos);
@@ -47,6 +65,10 @@ public class Ficheros {
         }
     }
     
+    /**
+     * Carga en el ArrayList "parcelas" de la clase Camping el ArrayList guardado en el fichero "data/parcelas.dat"
+     * Si el fichero no existe se hace una copia del fichero "data/parcelasCopiaEnBlanco.dat" y se carga la copia.
+     */
     public static void cargarEstado() {
         boolean eof = false;
         File fichero = new File("data"+File.separator+"parcelas.dat");
@@ -75,6 +97,10 @@ public class Ficheros {
         }
     }
     
+    /**
+     * Guarda en el archivo "data/facturas.csv" los datos del check out
+     * @param str Cadena que contenga los datos del chek out separados por punto y coma
+     */
     public static void facturar(String str){
         File f = new File("data"+File.separator+"facturas.csv");
         

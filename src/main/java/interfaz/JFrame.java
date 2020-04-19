@@ -11,11 +11,19 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Interfaz visual del programa de gestión de camping
+ * @author Rubén Abellón
+ * @version 1.0
+ */
 public class JFrame extends javax.swing.JFrame {
 
         private JButton tablero[][];
         
-        public JFrame() {
+    /**
+     * JFrame principal
+     */
+    public JFrame() {
         initComponents();
         setLocationRelativeTo(null);
         Ficheros.cargarParametros();
@@ -153,7 +161,7 @@ public class JFrame extends javax.swing.JFrame {
 
     private void jButtonParamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonParamActionPerformed
         int opc = JOptionPane.showConfirmDialog(rootPane, "Edita el archivo 'parametros.txt' que está en la carpeta 'data' de la aplicación para cambiar los parámetros.\n"
-                + "Una vez realizados los cambios en el fichero guardalo y pulsa 'Yes' para que se cargen los nuevos parámetros");
+                + "Una vez realizados los cambios en el fichero guardalo y pulsa 'Si' para que se cargen los nuevos parámetros");
         if(opc == 0){
             Ficheros.cargarParametros();
         }
@@ -165,13 +173,13 @@ public class JFrame extends javax.swing.JFrame {
                 File myFile = new File("data"+File.separator+"Manual.pdf");
                 Desktop.getDesktop().open(myFile);
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(rootPane, "No se ha podido abrir el manual");
+                JOptionPane.showMessageDialog(rootPane, "No se ha podido abrir el manual", "Alerta",JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButtonAyudaActionPerformed
 
     private void jButtonAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAboutActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "Autor de la aplicación: Rubén A.\nVersión: 0.4");
+        JOptionPane.showMessageDialog(rootPane, "Autor de la aplicación: Rubén Abellón\nVersión: 1.0\nGitHub: @rubeneso", "About",JOptionPane.INFORMATION_MESSAGE);
         
     }//GEN-LAST:event_jButtonAboutActionPerformed
 
@@ -214,17 +222,16 @@ public class JFrame extends javax.swing.JFrame {
         int num = Integer.parseInt(((JButton) evt.getSource()).getName());
         if(Camping.parcelas.get(num - 1).estaLibre()){
             //-------- Check In --------
-            String dni = JOptionPane.showInputDialog("Introduce el DNI del huésped");
+            String dni = JOptionPane.showInputDialog(rootPane, "Introduce el DNI del huésped", "Introducir DNI",  JOptionPane.INFORMATION_MESSAGE);
             //-------- Si se cancela a la hora de introducir el DNI no se hace el Check In --------
             if(dni != null){
                 try{
-//-----------------------------------Eliminar estos comentarios una vez terminadas las pruebas---------------------------------------------
-//                if(!comprobarDni(dni)) JOptionPane.showMessageDialog(rootPane, "El DNI introducido es incorrecto");
-//                else{
+                if(!comprobarDni(dni)) JOptionPane.showMessageDialog(rootPane, "El DNI introducido es incorrecto", "Alerta",JOptionPane.INFORMATION_MESSAGE);
+                else{
                     if(Camping.parcelas.get(num - 1).getClass().getName().equals("logica.Bungalow")){
                         //-------- Datos para parcela tipo Bungalow --------
-                        String nH = JOptionPane.showInputDialog("Introduce número de huéspedes");
-                        String nM = JOptionPane.showInputDialog("Introduce número de huéspedes que son menores de edad");
+                        String nH = JOptionPane.showInputDialog(rootPane, "Introduce número de huéspedes", "Introducir Datos",  JOptionPane.INFORMATION_MESSAGE);
+                        String nM = JOptionPane.showInputDialog(rootPane, "Introduce número de huéspedes que son menores de edad", "Introducir Datos",  JOptionPane.INFORMATION_MESSAGE);
                         int nHuespedes = Integer.parseInt(nH);
                         int nMenores = Integer.parseInt(nM);
                         //-------- Si el check in devuelve true marcamos como ocupada y guardamos el estado --------
@@ -232,7 +239,7 @@ public class JFrame extends javax.swing.JFrame {
                             ((JButton) evt.getSource()).setBackground(new Color(145, 25, 25));
                             Ficheros.guardarEstado();
                         }
-                        else JOptionPane.showMessageDialog(rootPane, "No se ha podido hacer el check in");
+                        else JOptionPane.showMessageDialog(rootPane, "No se ha podido hacer el check in", "Alerta",JOptionPane.INFORMATION_MESSAGE);
                     }
                     else{
                     //-------- Datos para tiendas de campaña y caravanas --------
@@ -240,19 +247,19 @@ public class JFrame extends javax.swing.JFrame {
                             ((JButton) evt.getSource()).setBackground(new Color(145, 25, 25));
                             Ficheros.guardarEstado();
                         }
-                        else JOptionPane.showMessageDialog(rootPane, "No se ha podido hacer el check in");
+                        else JOptionPane.showMessageDialog(rootPane, "No se ha podido hacer el check in", "Alerta",JOptionPane.INFORMATION_MESSAGE);
                     }
-//                }
+                }
             }
             catch(NumberFormatException ex){
-                JOptionPane.showMessageDialog(rootPane, "Error al introducir algún dato");
+                JOptionPane.showMessageDialog(rootPane, "Error al introducir algún dato", "Alerta",JOptionPane.INFORMATION_MESSAGE);
             }
             }
         }
         else{
             //-------- Check out --------
             double coste = Camping.parcelas.get(num - 1).checkOut();
-            if(coste == -2) JOptionPane.showMessageDialog(rootPane, "No se puede hacer el check out porque no ha transcurrido el tiempo mínimo de estadía");
+            if(coste == -2) JOptionPane.showMessageDialog(rootPane, "No se puede hacer el check out porque no ha transcurrido el tiempo mínimo de estadía", "Error de check out",JOptionPane.INFORMATION_MESSAGE);
             else{
                 //-------- Sacar los datos para facturar
                 String dni = Camping.parcelas.get(num - 1).getDniHuesped();
@@ -260,7 +267,7 @@ public class JFrame extends javax.swing.JFrame {
                 String tipoParcela = Camping.parcelas.get(num - 1).getClass().getName().substring(7);
                 //-------- Facturar --------
                 Ficheros.facturar(dni+";"+num+";"+tipoParcela+";"+fEntrada+";"+LocalDate.now()+";"+coste);
-                JOptionPane.showMessageDialog(rootPane, "El importe a cobrar son "+coste+"€");
+                JOptionPane.showMessageDialog(rootPane, "El importe a cobrar son "+coste+"€", "Información Check Out",JOptionPane.INFORMATION_MESSAGE);
                 //-------- Marcar la parcela como libre y guardar el estado --------
                 ((JButton) evt.getSource()).setBackground(new Color(4, 116, 214));
                 Ficheros.guardarEstado();

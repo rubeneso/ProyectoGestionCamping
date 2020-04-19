@@ -3,15 +3,40 @@ package logica;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Parcela de camping de tipo bungalow
+ * @author Rubén Abellón
+ * @version 1.0
+ */
 public class Bungalow extends Parcela{
 
+    /**
+     * Almacena el número de huéspedes de la parcela
+     */
     private int nHuepedes;
+    
+    /**
+     * Almacena el número de menores de edad de una parcela
+     */
     private int numeroMenoresEdad;
     
+    /**
+     * Constructor por defecto, llama al constructor padre.
+     */
     public Bungalow() {
         super();
     }
     
+    /**
+     * Realiza un check in como el heredado, y además almacena los parámetros añadidos de esta subclase
+     * @param dni DNI del huésped principal
+     * @param nH Número de huéspedes
+     * @param nME Número de huéspedes que son menores de edad
+     * @return <ul>
+     * <li>true: el check in se hizo correctamente</li>
+     * <li>false: el check in no se pudo hacer</li>
+     * </ul>
+     */
     public boolean checkIn(String dni, int nH,int nME){
         if(!super.checkIn(dni)) return false;
         //Se llama al metodo padre. Si no se puede hacer el checkIn devuelde falso
